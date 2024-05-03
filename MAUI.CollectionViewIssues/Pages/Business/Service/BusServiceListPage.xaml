@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QApp.UI.Pages.Business.Service.BusServiceListPage"
+             xmlns:viewmodel="clr-namespace:QApp.UI.ViewModels.Business"
+             xmlns:models="clr-namespace:QApp.UI.Models"
+             x:DataType="viewmodel:BusServiceListViewModel"
+             Title="Services"
+             Shell.TabBarIsVisible="False">
+
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackCommand}" />
+    </Shell.BackButtonBehavior>-->
+
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>-->
+
+    <Grid>
+        <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}"></ActivityIndicator>
+        <Border Margin="12" Padding="12">
+            <CollectionView x:Name="cvServices" SelectionMode="Single" 
+                        ItemsSource="{Binding ServiceCats}"
+                        IsGrouped="True"
+                        SelectionChangedCommand="{Binding ServiceSelectedCommand}"
+                        SelectionChangedCommandParameter="{x:Reference cvServices}"
+                            >
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center">
+                        <!--<Label Text="No service(s) found" HorizontalOptions="Center"></Label>-->
+                        <Button Text="Add a new category" WidthRequest="250"></Button>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="{x:Type models:ServiceCatUIModel}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="30"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <HorizontalStackLayout Grid.Row="0" Grid.Column="0" 
+                            Spacing="10">
+                                <Label
+                                       Text="{Binding CatName, StringFormat='{0}'}" 
+                                   VerticalOptions="Center" VerticalTextAlignment="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                                   FontAttributes="Bold" 
+                                    />
+                                <ImageButton Source="edit.svg" HeightRequest="20" WidthRequest="20"
+                                         
+                                    IsVisible="{Binding IsEditAllowed, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                    Command="{Binding CategoryEditStartCommand, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                    CommandParameter="{Binding .}"
+                                    ></ImageButton>
+
+                                <ImageButton Source="bin.svg" HeightRequest="20" WidthRequest="20"
+                                         
+                                    IsVisible="{Binding IsEditAllowed, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                    Command="{Binding DeleteCategoryCommand, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                    CommandParameter="{Binding .}"
+                                    ></ImageButton>
+                            </HorizontalStackLayout>
+                            <Button  Grid.Row="0" Grid.Column="1"
+                                Padding="0,0,0,0"
+                                Text="+"
+                                FontSize="25"
+                                FontAttributes="Bold"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="End"
+                                 BackgroundColor="Transparent"
+                                 TextColor="{StaticResource Primary}"
+                                 IsVisible="{Binding IsEditAllowed, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                 Command="{Binding AddServiceCommand, Source={RelativeSource AncestorType={x:Type viewmodel:BusServiceListViewModel}}}"
+                                 CommandParameter="{Binding .}"/>
+                            <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray500}}" Margin="0, 0, 0, 5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"></BoxView>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type models:ServiceUIModel}">
+                        <Grid Margin="0,5,0,0" RowSpacing="3" ColumnSpacing="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="60"></ColumnDefinition>
+                                <ColumnDefinition Width="60"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   FontSize="14"
+                            Text="{Binding SvcName}"/>
+
+                            <Label Grid.Row="0" Grid.Column="2"
+                                   FontSize="14"
+                            Text="{Binding Duration, StringFormat='{0} mins'}" 
+                               HorizontalTextAlignment="End" />
+
+                            <Label Grid.Row="0" Grid.Column="3"
+                                   FontSize="14"
+                            Text="{Binding Price}" HorizontalTextAlignment="End" />
+
+
+                            <BoxView Margin="20,8,0,5" HeightRequest="1" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" 
+                                 Color="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}"></BoxView>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.GroupFooterTemplate>
+                    <DataTemplate>
+                        <BoxView Margin="0,0,0,15" HeightRequest="0"></BoxView>
+                    </DataTemplate>
+                </CollectionView.GroupFooterTemplate>
+                <!--<CollectionView.Footer>
+                    <BoxView HeightRequest="150" Color="Transparent"></BoxView>
+                </CollectionView.Footer>-->
+            </CollectionView>
+        </Border>
+    </Grid>
+</ContentPage>
